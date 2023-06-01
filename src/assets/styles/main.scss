@@ -1,0 +1,43 @@
+/**
+ * Use this file to import partials.
+ * Do not include SCSS code in this file.
+ */
+
+/**
+ * Import variables
+ */
+
+@import "variables";
+
+/**
+ * Import npm dependencies
+ * see: https://v2.parceljs.org/features/module-resolution/
+ * see commented examples below
+ */
+
+// @import "some-node-module";
+// @import "@some-company/some-node-module";
+
+@import "../../../node_modules/bootstrap/scss/functions";
+@import "../../../node_modules/bootstrap/scss/variables";
+@import "variable_overrides";
+@import "../../../node_modules/bootstrap/scss/maps";
+@import "../../../node_modules/bootstrap/scss/mixins";
+@import "../../../node_modules/bootstrap/scss/root";
+@import "../../../node_modules/bootstrap/scss/alert";
+@import "../../../node_modules/bootstrap/scss/accordion";
+@import "../../../node_modules/bootstrap/scss/card";
+@import "../../../node_modules/bootstrap/scss/transitions";
+
+/**
+ * Import layouts
+ * It's a best practice to use a different partial for each page
+ */
+
+@import "layouts/home";
+
+/**
+ * Do NOT include anything else in this file!
+ */
+
+@import "utility_classes";
