@@ -14,7 +14,7 @@ El enlace al respositorio de github utilizado es el siguiente:
 [https://github.com/nacaru-w/h-II-P3](https://github.com/nacaru-w/h-II-P3)
 
 La página web subida en Netlify puede consultarse aquí:
-COMPLETAR
+[https://main--famous-custard-f63314.netlify.app/](https://main--famous-custard-f63314.netlify.app/)
 
 # Instalación del boilerplate y creación del repositorio
 
@@ -578,7 +578,7 @@ Netlify realizó, entonces, el _deploy_ del proyecto de forma exitosa y sin gene
 
 Este se publicó en la siguiente URL:
 
-[https://delightful-kashata-ab932a.netlify.app/index.html](https://delightful-kashata-ab932a.netlify.app/index.html)
+[https://main--famous-custard-f63314.netlify.app/](https://main--famous-custard-f63314.netlify.app/)
 
 # Propiedad intelectual: atribución
 Aquí se realiza la atribución debida a los autores de los elementos externos utilizados en el proyecto. Todos ellos poseen una licencia compatible con su uso por parte de terceros, con una serie de condiciones según el tipo de licencia Creative Commons asignada.
