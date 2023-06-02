@@ -11,7 +11,7 @@ header-includes:
 ---
 
 El enlace al respositorio de github utilizado es el siguiente:
-COMPLETAR
+[https://github.com/nacaru-w/h-II-P3](https://github.com/nacaru-w/h-II-P3)
 
 La página web subida en Netlify puede consultarse aquí:
 COMPLETAR
@@ -22,7 +22,7 @@ Al igual que en las PECs anteriores, el primer paso que se llevó a cabo en la r
 
 Se creó un nuevo repositorio git local y lo vinculé a un repositorio remoto asociado a mi cuenta de Github. Este se puede consultar a través de la siguiente URL:
 
-[https://github.com/nacaru-w/h-II-P2](https://github.com/nacaru-w/h-II-P2)
+[https://github.com/nacaru-w/h-II-P2](https://github.com/nacaru-w/h-II-P3)
 
 Esto permitiría tener un sistema de control de cambios, pudiendo revertir a un estado anterior en caso de necesitarlo. La habilitación de un repositorio público es necesaria para la publicación de la página a través de Netlify.
 
@@ -36,7 +36,7 @@ Se añadió, por cuestiones de hábito, un script para el comando `npm run start
 
 Aunque para esta práctica no se utilizó una guía de estilo, se siguió usando el linter de código personalizado instalado localmente en mi dispositivo. Este realiza una serie de modificaciones (cambia aspectos como el indentado, el número de saltos de línea, etc) cada vez que realizo un guardado en la aplicación VSCode.
 
-## Configuración de Tailwimd
+## Configuración de Tailwind
 
 Se comenzó por crear un archivo de configuración de Tailwind, esto se realizó a través del siguiente comando en la consola:
 
@@ -86,7 +86,7 @@ fontFamily: {
 }
 ```
 
-También se configuró un valor estándar (`normal`) para la propiedad `border-radius`, con el objetiov de proporcionar estandarización a este tipo de estilo de bordes.
+También se configuró un valor estándar (`normal`) para la propiedad `border-radius`, con el objetivo de proporcionar estandarización a este tipo de estilo de bordes.
 
 ```js
 extend: {
@@ -113,7 +113,6 @@ Tras su instalación, Tailwind no funcionaba en el proyecto. Esto fue así porqu
 {
     "plugins": {
         "tailwindcss": {},
-        "posthtml-include": {}
     }
 }
 ```
@@ -145,19 +144,19 @@ Se relizaron algunas modificaciones al sistema de ficheros respecto al del proye
 
 * ¿Qué diferencias hay entre el enfoque de tipo CSS semántico (el que usaste en las otras PEC) y el CSS de utilidades? ¿Cómo afectó esto a tu proceso de desarrollo? ¿Y a tu código?
 
-Se trata de enfoques muy diferentes. En el primer caso, aplicas los estilos mediante selectores CSS que encuentran elementos, clases, ids, etc a los que adjudicar las propiedades y sus valores descritos en las reglas. En el enfoque de utiliades, se utilizan utilidades preconfiguradas por Tailwind (o personalizadas) y estas se aplican a cada elemento en forma de clases. En casos en los que no resulta eficaz hacerlo así, existe la aplicación mediante la directiva `@apply`, que utiliza un enfoque más parecido al semántico.
+Se trata de enfoques muy diferentes. En el primer caso, aplicas los estilos mediante selectores CSS que encuentran elementos, clases, ids, etc a los que adjudicar las propiedades y sus valores descritos en las reglas. En el enfoque por utilidades, se utilizan sets preconfigurados por Tailwind (o personalizados) y estas se aplican a cada elemento en forma de clases. En casos en los que no resulta eficaz hacerlo así, existe la aplicación mediante la directiva `@apply`, que utiliza un enfoque más parecido al semántico.
 
 Para mí esto supuso un enorme cambio de enfoque de desarrollo. Por una parte, el enfoque atómico permite aplicar la mayoría de estilos _on the go_ a la vez que va describiéndose el código HTML, lo cual puede ser aventajoso a la hora de ahorrar tiempo. Por otro lado, haber utilizado Tailwind implica haber tenido que familiarizarse con la nomeclatura de sus utilidades, por lo que, de alguna forma, ha supuesto tener que volver a aprender 
 
 * ¿Qué diferencias encontraste entre usar una librería de componentes y una librería de utilidades?
 
-Son conceptos ampliamente distintos. Una librería de componentes te construye componentes completos, es decir, te construye elementos total o parcialmente, y esto puede incluir el código HTML, los estilos e incluso el javascript asociado. Una librería de utilidades, en este caso Tailwindcss, incluye formas predefinidas de aplicar estilos. En general, el sentido de una librería de utilidades es más ligero, con un uso más específico y complementario; por otr olado, una librería de utilidades te da las piezas que componen la web ya creadas, y uno puede decidir si modificarlas o no a _posteriori_. 
+Son conceptos ampliamente distintos. Una librería de componentes te construye elementos con funcionalidad propia que llamamos componentes, es decir, te construye elementos total o parcialmente, y esto puede incluir el código HTML, los estilos e incluso el javascript asociado. Una librería de utilidades, en este caso Tailwindcss, incluye formas predefinidas de aplicar estilos (hay otras librerías de utilidades que aportan funciones predefinidas, por ejemplo). En general, el sentido de una librería de utilidades es más ligero, con un uso más específico y complementario; por otro olado, una librería de componentes te da las piezas que componen la web ya creadas, y uno puede decidir si modificarlas o no a _posteriori_. Podríamos resumirlo en que las librerías de utilidades proporcionan herramientas y las de componentes aportan bloques o piezas de contenido.
 
 * ¿Qué clases y componentes decidiste extraer y por qué?
 
-Las clases extraidas se encuentran descritas exhaustivamente, incluida su justificación, en el desarrollo del código que se explica en el apartado posterior. De forma resumida, podemos afirmar que el criterio principal para extraer las clases y aplicarlas mediante directiva fue la existencia de un elemento que se repite con frecuencia a lo largo de la web, y la presencia de una cantidad significativa de propiedades CSS que deben aplicarse al elemento.
+Las clases extraidas se encuentran descritas exhaustivamente, incluida su justificación, en el desarrollo del código que se explica en el apartado posterior. De forma resumida, podemos afirmar que el criterio principal para extraer las clases y aplicarlas mediante directiva fue la existencia de un elemento que se repite con frecuencia a lo largo de la web, y/o la presencia de una cantidad significativa de propiedades CSS que deben aplicarse a un solo elemento.
 
-En cuanto a los componentes, se eligió el set de reglas descrito en la página principal y los blogs de previsualización hallados al final de la página. La principal razón por la que se extrayeron estos componentes es porque puede considerarse que son de carácter cambiante, por lo que acceder individualmente a ese código permite realizar sus modificaciones frecuentes de manera más sencilla. 
+En cuanto a los componentes, se eligieron el set de reglas descrito en la página principal y los blogs de previsualización hallados al final de la página, ambos en `index.html`. La principal razón por la que se extrajeron estos componentes es porque puede considerarse que son de carácter cambiante, por lo que acceder individualmente a ese código permite realizar sus modificaciones frecuentes de manera más sencilla. 
 
 
 # Recreación de la página web
@@ -169,7 +168,7 @@ Ya que la práctica requería un enfoque basado en Atomic CSS, con el objetivo d
 * A la hora de desarrollar el código relativo a elementos únicos, se realizaría un enfoque atómico puro, es decir, realizando adiciones de estilo a través del atributo `class` dentro de la línea de código HTML. Dependiendo de la complejidad del elemento y su situación respecto al resto de elementos de la página, en ocasiones de dejó la clase original aún cuando esta no posee ninǵun estilo asignado a la misma. Esto se hizo de tal forma con el objetivo de identificar más fácilmente los elementos en el código.
 * En cuanto al desarrollo de elementos que se repiten en la página web o que poseen una amplia cantidad de estilos, este se realizó a través de un abordaje mediante directivas. En concreto, estas se desarrollarían en el archivo `_directives.scss`, a través de las `at-rules`: `@layer`, que sirve para identificar la función del elemento al que se le aplican los estilos dentro del código, pudiendo ser este `@component` o `@base`; y `@apply`, que se usa para introducir las propiedades y sus valores. 
 
-Para el desarrollo del proyecto en su totalidad, se hizo uso de la [página](https://delightful-kashata-ab932a.netlify.app) a la que se había subido el proyecto de la PEC2. Mediante el inspector de estilos, se identificaron las reglas CSS aplicadas a los diferentes elementos y, haciendo uso de la extensa descripción de las utilidades proporcionada en la [página de documentación de Tailwind](https://tailwindcss.com/docs). Se aplicaron los estilos originales mediante Tailwind con la mayor fidelidad posible.
+Para el desarrollo del proyecto en su totalidad, se hizo uso de la [página](https://delightful-kashata-ab932a.netlify.app) a la que se había subido el proyecto de la PEC2. Mediante el inspector de estilos, se identificaron las reglas CSS aplicadas a los diferentes elementos y, haciendo uso de la extensa descripción de las utilidades proporcionada en la [página de documentación de Tailwind](https://tailwindcss.com/docs). Se aplicaron los estilos originales mediante Tailwind con la mayor fidelidad posible. Téngase en cuenta, también, que los pocos estilos que resultaban ininplementables o que daban error a través de Tailwind fueron descritos mediante código CSS.
 
 ## Desarrollo en Tailwind de encabezado y pie de página
 
