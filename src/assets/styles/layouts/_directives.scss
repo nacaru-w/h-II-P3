@@ -1,4 +1,29 @@
+@layer base {
+  a {
+    text-decoration: none;
+    color: $text-color;
+    transition: color 1s ease;
+  }
+
+  a:hover {
+    color: $darker-colorful-element-color;
+    text-decoration: underline;
+  }
+
+  a:visited {
+    color: none;
+  }
+
+  svg:hover {
+    fill: $darker-colorful-element-color;
+    transition: fill 1s ease;
+  }
+}
+
 @layer components {
+
+  // index.html (blog.html)
+
   .menu-item {
     @apply px-8;
   }
@@ -38,28 +63,26 @@
   .button {
     @apply w-[142px] cursor-pointer rounded-[6px] my-0 mx-auto py-[.75em] px-[.5em] text-[.8em] font-bold bg-normal-bg-color;
   }
-}
 
-.say-chess {
-  text-shadow: 2px 2px lightcoral;
-}
+  // members.html
 
-a {
-  text-decoration: none;
-  color: $text-color;
-  transition: color 1s ease;
-}
+  .member-card {
+    @apply w-[20em] flex flex-col py-8 items-center justify-center;
+  }
 
-a:hover {
-  color: $darker-colorful-element-color;
-  text-decoration: underline;
-}
+  .member-img {
+    clip-path: circle(50%);
+  }
 
-a:visited {
-  color: none;
-}
+  .member-name {
+    @apply text-[1.4em] font-bold my-4;
+  }
 
-svg:hover {
-  fill: $darker-colorful-element-color;
-  transition: fill 1s ease;
+  .member-description {
+    @apply m-6 h-32;
+  }
+
+  .elo {
+    @apply py-6;
+  }
 }
