@@ -142,13 +142,13 @@
       this[globalName] = mainExports;
     }
   }
-})({"fLD46":[function(require,module,exports) {
+})({"8KgGv":[function(require,module,exports) {
 var global = arguments[3];
 var HMR_HOST = null;
 var HMR_PORT = null;
 var HMR_SECURE = false;
 var HMR_ENV_HASH = "5c3cf7e1285358ec";
-module.bundle.HMR_BUNDLE_ID = "3efe2cbeabdb1b70";
+module.bundle.HMR_BUNDLE_ID = "5f92b63aab2256da";
 "use strict";
 /* global HMR_HOST, HMR_PORT, HMR_ENV_HASH, HMR_SECURE, chrome, browser, __parcel__import__, __parcel__importScripts__, ServiceWorkerGlobalScope */ /*::
 import type {
@@ -573,25 +573,8 @@ function hmrAccept(bundle /*: ParcelRequire */ , id /*: string */ ) {
     });
 }
 
-},{}],"5Msky":[function(require,module,exports) {
-/**
- * Import dependencies from node_modules
- * see commented examples below
- */ // import 'some-node-module';
-// import SomeModule from 'some-node-module';
-/**
- * Write any other JavaScript below
- */ // Opens and closes navigation menu
-const primaryHeader = document.querySelector(".primary-header");
-const navToggle = document.querySelector(".mobile-nav-toggle");
-const primaryNav = document.querySelector(".primary-navigation");
-const warnMessage = document.querySelector(".alert-info");
-navToggle.addEventListener("click", ()=>{
-    primaryNav.hasAttribute("data-visible") ? navToggle.setAttribute("aria-expanded", false) : navToggle.setAttribute("aria-expanded", true);
-    primaryNav.toggleAttribute("data-visible");
-    primaryHeader.toggleAttribute("data-overlay");
-});
+},{}],"cjRvI":[function(require,module,exports) {
 
-},{}]},["fLD46","5Msky"], "5Msky", "parcelRequireb0cb")
+},{}]},["8KgGv","cjRvI"], "cjRvI", "parcelRequireb0cb")
 
-//# sourceMappingURL=index.abdb1b70.js.map
+//# sourceMappingURL=PEC3.ab2256da.js.map
