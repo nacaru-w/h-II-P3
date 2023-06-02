@@ -35,6 +35,7 @@ npm install tailwindcss --save-dev
 Se añadió, por cuestiones de hábito, un script para el comando `npm run start`, que realiza las mismas funciones que `npm run build` en el archivo `package.json`.
 
 Aunque para esta práctica no se utilizó una guía de estilo, se siguió usando el linter de código personalizado instalado localmente en mi dispositivo. Este realiza una serie de modificaciones (cambia aspectos como el indentado, el número de saltos de línea, etc) cada vez que realizo un guardado en la aplicación VSCode.
+
 ## Configuración de Tailwimd
 
 Se comenzó por crear un archivo de configuración de Tailwind, esto se realizó a través del siguiente comando en la consola:
@@ -43,321 +44,248 @@ Se comenzó por crear un archivo de configuración de Tailwind, esto se realizó
 npx tailwindcss init
 ```
 
-Una vez creado el _boilerplate_ del archivo de configuración, se procedió a introducir los colores que se habían asignado en la PEC2 a variables SCSS.
-
-
-
-### Justificación y aplicación según la guía de estilo
-
-El set de reglas estándar de SCSS de stylelint `stylelint-config-standard-scss` se eligió porque ese sería el lenguaje utilizado para la confección de la hoja de estilos de la página. Se realizaron comprobaciones para que las reglas especificadas por el mismo no entraran en conflicto con la guía de estilo de codeguide.co elegida. En los casos en los que esto se daba, se añadieron excepciones, tal y como se ha descrito en el apartado anterior.
-
-Se aplicó una restricción del número de unidades utilizadas, como ya se ha descrito, con el objetivo de que la especificación de las dimensiones de los elementos de la página fuera más homogénea, con la justificación de que una mayor cantidad de unidades implica una mayor dificultad a la hora de cuadrar y maquetar el proyecto. Las unidades fueron elegidas en base a lo más utilizado por mi parte en el pasado. Se fueron añadiendo si, por razones técnicas, era necesario incluir una unidad no hallada en la lista del archivo de configuración de Stylelint.
-
-La regla `selector-class-pattern`, que limita el nombre de las clases a aquellas con minúsculas, números y un guión, se realizó en base a las recomendaciones especificadas en la guía de estilo de codeguide.co, en la sección «Class names», que recomienda lo siguiente:
-
->Keep classes lowercase and use dashes (not underscores or camelCase). Dashes serve as natural breaks in related class (e.g., `.btn` and `.btn-danger`).
-
-La especificación del tipo de comillas permitido también se extrajo de las recomendaciones de la guía de estilo utilizada. En concreto, lo especificado en el apartado «Syntax»:
-
->Always use double quotes, never single quotes, on attributes.
-
-La regla que introduce la obligatoriedad de utilizar la notación moderna para la designación de colores se añadió porque la guía de estilo elegida recomienda el uso de la notación `rgba()` en la sección «Colors».
-
-La decisión de eliminar la regla `no-descending-specificity` se hizo en base a la cantidad de _nesting_ empleado en el proyecto. Esta regla se anuló de forma posterior al comprobar que el funcionamiento de la misma no era el adecuado y de que existían una gran cantidad de falsos errores en el proceso de análisis de Stylelint.
-
-## Instalación de dependencia externa: `w3c-html-validator`
-
-Como depedencia externa a instalar según lo exigía el enunciado, se decidió incorporar una dependencia que permite ejecutar el [servicio de validación HTML de W3C](https://validator.w3.org/) de forma local a través de la consola de comandos. Existe una herramienta actualizada recientemente y con soporte para este fin llamada [W3C HTML Validator](https://www.npmjs.com/package/w3c-html-validator). Esta fue instalada a través de la ejecución del siguiente código:
-
-```bash
-npm install --save-dev w3c-html-validator
-```
-
-Para facilitar su uso, se configuró el archivo `package.json`, añadiendo el siguiente comando al objeto `scripts`:
-
-```json
-  "scripts": {
-    "validator": "html-validator --ignore='Element “include” not allowed as child of element “body”'"
-  }
-```
-
-La línea que usa el comando opcional `--ignore` se añadió para evitar errores de compatibilidad entre el análisis realizado por esta extensión y el uso de la dependencia `posthtml-include`, que permite unificar varios archivos `html` distintos mediante el elemento `include`, tal y como se realizó en la elaboración del _footer_ y el _header_ hallados en la carpeta `src/views`.
-
-El script se ejecutaría por tanto mediante el siguiente comando:
-
-```bash
-npm run validator
-```
-
-Una vez ejecutado el código, aparecerían en consola los errores a solucionar. Una vez solucionados todos, la herramienta de validación arroja un mensaje positivo que indica que el archivo pasa el análisis de la W3C.
-
-![Mensaje de éxito que aparece al no darse errores en el archivo `html`](doc_imgs/captura_validator.png)
-
-Esta análisis se realizó una vez terminada la redacción de todo el código `html` de la página. Una vez considerados todos los archivos como válidos, se mantuvo este código de forma definitiva.[^1] 
-
-## Instalación e implementación de bootstrap
-
-Se integró Bootstrap en el repositorio local, ejecutando el siguiente comando:
-
-```bash
-npm i --save bootstrap @popperjs/core
-```
-
-Para poder importar el javascript necesario para algunas de las funcionalidades que incluyen los componentes de Bootstrap, se añadió el siguiente código al archivo `main.js`:
+Una vez creado el _boilerplate_ del archivo de configuración, se procedió a introducir los colores que se habían asignado en la PEC2 a variables SCSS al archivo `tailwind.config.js`. Para tal fin se configuró el objeto `colors` de la siguiente manera:
 
 ```js
-import * as bootstrap from 'bootstrap';
-```
-
-Respecto a la importación de módulos de Bootstrap, en un principio se decidió realizar una importación completa, añadiendo el código `@import '~bootstrap/scss/bootstrap';` al archivo de importación `main.scss`. Esto, sin embargo, se descartó posteriormente porque aumentó de forma considerable el tiempo de carga de la web. En su lugar, se decidió activar módulos de Bootstrap selectivamente, de forma que se realizaron las siguientes importaciones: 
-
-```scss
-@import "../../../node_modules/bootstrap/scss/functions";
-@import "../../../node_modules/bootstrap/scss/variables";
-@import "../../../node_modules/bootstrap/scss/maps";
-@import "../../../node_modules/bootstrap/scss/mixins";
-@import "../../../node_modules/bootstrap/scss/root";
-@import "../../../node_modules/bootstrap/scss/alert";
-@import "../../../node_modules/bootstrap/scss/accordion";
-@import "../../../node_modules/bootstrap/scss/card";
-@import "../../../node_modules/bootstrap/scss/transitions";
-```
-
-Estas correspondían a los módulos mínimos necesarios para que los componentes implementados en el proyecto funcionaran adecuadamente. 
-
-### Uso de componentes de Bootstrap
-
-Una vez realizada la importación de los módulos, se decidió utilizar los siguientes componentes:
-
-* Un [acordeón](https://getbootstrap.com/docs/5.3/components/accordion/). Este se colocó en la página `contact.html` y serviría para definir las FAQ (Frequently Asked Questions) del club.
-* Un [mensaje de alerta](https://getbootstrap.com/docs/5.3/components/alerts/). Este se posicionó también en la página `contact.html`, inmediatamente inferior a la sección de las FAQ.
-* Un [botón de cerrado](https://getbootstrap.com/docs/5.3/components/close-button/), que se incluyó como parte del mensaje de alerta mencionado en el punto anterior, al cual se le aplicó javascript personalizado para que tuviera una funcionalidad.
-* Un [grupo de tarjetas](https://getbootstrap.com/docs/5.3/components/card/#card-groups), empleado en la parte final de la página `blog.html`. El objetivo de este componente es contener previsualizaciones con enlaces a otros posibles artículos del blog.
-
-Para la personalización de los componentes, además de realizarse a través de la hoja de estilos general `_home.scss` mediante la modificación de diferentes propiedades, se creó el archivo `variable_overrides.scss`. Este, que sería importado a `main.scss`, contiene el código correspondiente a la sobreescritura de las variables por defecto de Bootstrap que permiten la modificación del aspecto de los componentes. 
-
-En las siguientes secciones se describe la aplicación y personalización de los componentes:
-
-#### Acordeón
-
-El componente de acordeón se modificó ampliamente para adaptarlo a las expectativas y al estilo de la web:
-
-* Se cambiaron los atributos, añadiendo `collapse` a todas las clases de los tres segmentos que lo componen para que estos apareciesen cerrados por defecto. Se hizo de forma similar con el valor del atributo `aria-expanded`, que se determinó como `false` por defecto, con el objetivo de que los lectores de pantalla y otros dispositivos orientados a la accesibilidad puedan interpretar el menú como cerrado.
-* Se crearon variables para sobreescribir las que Bootstrap aplica por defecto. En este caso se añadieron las siguientes, aunque no todas acabaron utilizándose:
-
-```scss
-$accordion-button-bg: unset;
-$accordion-button-active-bg: rgb(254 248 244);
-$accordion-icon-color: pink;
-$accordion-button-active-color: unset;
-$accordion-button-focus-box-shadow: rgb(248 221 201);
-```
-
-* Se modificaron aspectos de la hoja de estilos SCSS que no se pudieron modificar mediante la sobreescritura de variables. Específicamente destaca el caso del color del botón de cerrado del acordeón, que, tras intentarlo a través del método descrito en el punto anterior, se decidió que era menos complejo cambiar el estilo mediante la implementación de la propiedad `background-image` del selector `button.accordion-button:not(.collapsed)::after`, cuyo atributo `path fill` se configuró mediante el valor del color deseado. Entre otros aspectos, también se modificó el padding por defecto.
-
-El resultado final permitió obtener un acordeón dinámico que se adaptaba bien a la estética elegida para la web.
-
-#### Mensaje de alerta
-
-Para el mensaje de alerta se usó el de tipo «info», configurado con las clases de Bootstrap `alert alert-info`. Este se configuró de forma que utilizase un color de fondo y letra diferentes. Para esto, Bootstrap realiza un mapeo de colores en base a lo definido como color primario, por lo que para llevar a cabo el _override_, tuvo que hacerse otro mapeo que sustituyese al mapeo original. Esto se realizó definiendo un color para el tema «info» nuevo y aplicando `map` sobre el mismo:
-
-```scss
-$info: rgb(248 221 201);
-
-// Mapping
-$theme-colors: (
-    "info": $info
-);
-```
-
-Esto no solo sustituyó el color de fondo, sino que también aplicó un color distinto a la letra y al borde.
-
-#### Botón de cerrado
-
-Bootstrap incluye como parte de sus componentes un icono de botón cerrado con ciertas opciones de interactividad: posibilidad de convertirlo en botón desactivado fácilmente, aplicación de ciertas propiedades ante un _hover_, etc.
-
-Se decidió utilizar este tipo de botón como forma estándar para el proyecto. Aunque en la realización de esta pŕactica solo se puso en uso una vez, puede contribuir a una estandarización más sencilla en proyectos de mayor envergadura.
-
-Entre sus modificaciones, se eliminó el cuadrado que ocupaba en el fondo mediante la aplicación de la declaración `background-color: transparent`, y se le aplicó la variable `$darker-pink` definida en el archivo `_variables.scss`.
-
-#### Grupo de tarjetas
-
-Como parte de la sección final del archivo `blog.html`, se añadió una serie de enlaces a otros _posts_ ficticios del blog organizados dentro de un grupo de tarjetas.
-
-Estos se aplicaron como un `div` de clase de Bootstrap `card-group`. No se realizó ninguna modificación a través del _overriding_ de variables, pero se cambiaron algunos estilos a través del código SCSS. Además, se añadieron imágenes para cada tarjeta y se adaptó el fondo de este espacio a través de la propiedad `background-image`. 
-
-## Utilización de las características de Sass
-
-### Variables
-Esta característica se ha utilizado de forma habitual en la elaboración del proyecto. Concretamente se han englobado dentro del archivo `_variables.scss` y `_variable_overrides.scss`. El segundo contiene las variables que sobreescriben las variables por defecto que se aplican a los componentes de Bootstrap.
-
-Se han definido variables para las fuentes y para los colores estándar.
-
-### Anidado
-El anidado se aplicó en las reglas SCSS incluídas en el archivo `_home.scss`. Este se desarrolló de forma amplia en la estructuración de las mismas, siguiendo la estructura de anidado utilizada en la confección del archivo `html`.
-
-### Funciones
-
-Al comienzo del código en `_home.scss` se ha implementado una función de Sass que invierte el color de las cosas. Para ello, se ha tenido que importar igualmente `@sass: color`. La función es la siguiente:
-
-```scss
-@function invert($color) {
-  $red: 255 - color.red($color);
-  $green: 255 - color.green($color);
-  $blue: 255 - color.blue($color);
-
-  @return rgb($red, $green, $blue);
-}
-```
-
-Se ha aplicado para generar algunas sombras de títulos.
-
-### Parciales
-El código SCSS se ha desarrollado a lo largo de varios archivos: `_home.scss`, `_variable_overrides.scss`, `_utility_classes.scss` y `_variables.scss` que se compilan de forma conjunta en el archivo `main.scss`.
-
-### Importación
-Para la compilación de los _partials_ definidos en la sección anterior, se utiliza `@import`.
-
-## Elección de la paleta de colores
-
-Para la paleta de colores, se probaron varias combinaciones utilizando al aplicacion [coolors.co](coolors.co). Finalmente, se decidió usar la siguiente paleta de colores:
-
-![Paleta de colores del sitio](doc_imgs/color_palette.png){ width=400px }
-
-* El color #F5F5F5 (whitesmoke) se asignó a los fondos básicos
-* El color #1f1f1f (eerie black) se asignó al color de los textos
-* El color #cccccc (silver) se asignó a
-* El color #333333 (jet) se asignó a
-* El color #f8ddc9 (champagne pink) se asignó a elementos de contraste, creándose una tonalidad más oscura mediante el módulo SCSS `@color`, la cual se aplicó a los enlaces a través de la pseudoclase `hover`.
-
-Estos colores fueron asignados a variables SCSS en el archivo `_variables.scss`.
-
-También se han usado ocasionalmente algunos de los [colores propupor defecto utilizados en los componentes de Bootstrap](https://getbootstrap.com/docs/5.3/customize/color/), cuando se ha considerado que estos encajaban bien con la paleta de colores elegida y el contexto.
-
-## Iconografía e imágenes
-
-Para los iconos de la web, decidió usarse el paquete de Sports por ainul muttaqin en The Noun Project (disponible [en este enlace](https://thenounproject.com/browse/collection-icon/sports-118176/?p=1)), liberados bajo licencia CC BY 3.0.
-
-Para las imágenes de los miembros del club se usó la página Generated.Photos. Estas se modificaron a través de la propiedad `clip-path` con el valor `circle(50% at 50% 50%)`. Se utilizó la herramienta [clippy](https://bennettfeely.com/clippy/) para ello.
-
-# Elaboración de la página web
-
-La estructura de los elementos de toda la página web se realizó en función a lo descrito en el modelo de _wireframes_ proporcionado en el enunciado, con ligeras modificaciones en apartados puntuales.
-
-## Desarrollo de encabezado y pie
-
-### Desarrollo del `header`
-Para el header se decidió utilizar HTML y SCSS puro. Se siguió un diseño basado en los _wireframes_ proporcionados en el enunciado de la práctica, con una barra superior en la que se mostrase, a la izquierda, el logo principal del club, con un enlace a la página principal; y, a la derecha, el menú de navegación con las diferentes páginas que conforman el sitio web. 
-
-Para el código HTML, se utilizó el elemento `header` para englobar todo el contenido. Este contiene un `div` con la clase `container` para poder modificar fácilmente los elementos de adentro. Estos son tres, el logo principal de la página, configurado como un enlace que lleva a la página principal; el botón que abre el menú de navegación _responsive_ (desarrollado en los párrafos posteriores), configurado como un elemento `button`; y el menú de navegación en sí, configurado como un elemento `nav`. 
-
-En cuanto al código SCSS, estos elementos fueron distribuidos fácilmente a través de la propiedad `display: flex` y situados adecuadamente mediante `align-items:center` y `justify-content: space between`. Sin embargo, se decidió, desde un enfoque orientado hacie una mayor _responsiveness_, crear un menú _responsive_ para cuando el tamaño de pantalla dispositivo fuera menor.
-
-![Muestra del menù de navegación _responsive_ que aparece en dispositivos pequeños](doc_imgs/pantalla_men%C3%BA_responsive.png){ width=200px }
-
-Para su funcionamiento, se añadió una amplia `@media` _query_ que se aplicaría en dispositivos de anchura menor a `40em`. En estos casos, aparecería una imagen de «hamburguesa» en la esquina superior derecha de la pantalla (configurada a través de SCSS como un fondo). Esta imagen, ligada a un _event listener_ de javascript que aplica una clase `data-visible`, ligada a un código CSS `display:block` o `display:none` a través de un _toggle_, abriría un menú configurado a través de `display: grid`, que mostraría las opciones de navegación. Para conseguir el efecto de sombreado que se aplica al resto de elementos de la página, se añadió un borde expandido a `1000vh` con una opacidad del 50% a través de la propiedad `box-shadow`. Para que el menú no tuviese colisión con el resto de elementos de la página, se le añadió al propiedad CSS `position: fixed`. Además, para que este apareciese en una posición (en cuanto a profundidad) más prioritaria respecto al resto de elementos, se aplicó la propiedad `z-index: 950`. Se usó la propiedad `gap` para configurar la distancia entre los elementos de la lista que conforma el menú.
-
-### Desarrollo del `footer`
-Para el desarrollo del _footer_, se siguió, de igual forma, la distribución proporcionada por los _wireframes_ del enunciado de la práctica. Sin embargo, para esta sección estos no eran demasiado específicos, por lo que se decidió seguir un enfoque propio en su diseño y elaboración.
-
-De esta forma, se creó un _footer_ dividido en dos secciones. Una sección superior, determinada mediante un elemento `div` con clase `main-footer`, y una interior, determinada con un elemento `div` con clase `sub-footer`. El `main-footer` contiene, a su vez, dos elementos `div`: uno `left-side-footer` y otro `right-side-footer`. En el espacio izquierdo de este footer se halla un botón que lleva a la página de contacto e información sobre una posible aplicación para el club, configurados como elementos `button` y `div`, respectivamente. En el otro lado, se halla información relativa a la dirección, configurada dentro de una lista no ordenada. El `sub-footer` contiene tres secciones, distribuidas en elementos `div`. De izquierda a derecha, estas corresponden al logo principal de la página con un enlace a la portada, una sección de enlaces a las diferentes paǵinas de la web, conformadas como una lista no ordenada, y enlaces a redes sociales a través de iconos `svg`.
-
-## Desarrollo del `main`: parte principal de las páginas
-
-### Desarrollo del `main` de `index.html`
-
-Para la parte principal de la portada, englobada dentro de un elemento main, se ha decidido realizar un enfoque en formato póster que utiliza CSS _grid_.
-
-En cuanto al HTML, este simplemente consiste en una serie de elementos `div` contenidos dentro de uno de clase `wrapper`. Estos elementos poseen clases distintas con el objetivo de poder aplicar el CSS necesario para darle el aspecto de un tablero de ajedrez.
-
-Para conseguir esto, se configuró la propiedad `display` con el valor `grid` y se añadió la propiedad `grid-template-columns` junto con el valor `1fr 1fr 1fr 1fr`. Esto conseguiría que los elementos `div` mencionados anteriormente se dispusieran en forma de cuadrícula de cuatro columnas y cuatro filas. Además, se añadió un efecto de rotación de 45 grados al elemento `wrapper` que solo se activa en dispositivos de mayor tamaño. Esto se realizó mediante el uso de la propiedad `transform` con el valor `rotate(45deg)`.[^2] También se realizó la rotación de los bloques a los que se les aplicó un fondo con una pieza de ajedrez para que tomaran una posición oblícua, usando la misma propiedad. Para asegurarse de que estos se hallaban bien encajados en la cuadrícula correspondiente, se usaron las propiedades `background-size` y `background-position` con los valores `contain` y `center` respectivamente. 
-
-Además, se añadió un rótulo con el nombre del club «Chess Mates». Esto se realizó en las posiciones adyacentes a las cuadrículas con las piezas. Se configuró el estilo, usando la función nativa de CSS `clamp` para conseguir un tamaño de texto que se adapte al tamaño del dispositivo, y otorgando a la tipografía un color de sombra y tipo de fuente únicos.
-
-Con el objetivo de asegurarnos de que los bloques del tablero eran exactamente cuadrados, se utilizó la propiedad `aspect-ratio`, a la cual se le otorgó el valor `1`. Los diferentes aspectos pueden visualizarse en las imágenes siguientes.
-
-![Muestra de la portada en dispositivos de mayor tamaño](doc_imgs/portada_desktop.png){width=300px}
-![Muestra de la portada en dispositivos de tamaño mediano](doc_imgs/portada_tablet.png){width=200px}
-![Muestra de la portada en dispositivos de menor tamaño](doc_imgs/portada_m%C3%B3vil.png){width=200px}
-
-
-#### Uso de `@supports`
-
-Con el objetivo de adaptar la hoja de estilos a navegadores que no soportan CSS grid, se hizo uso de la _query_ `@supports`. Esta permite implementar código solo en las instancias en las que el navegador posee soporte para esa característica.
-
-En este caso, se utilizaron dos _queries_ distintas: una `@supports (display: grid)`, para dispositivos que sí soportan este rasgo; y una `@supports not (display:grid)`, que cubre los casos en los que esta característica no es implementable. Se testeó el código para comprobar que la visualización, aún siendo significativamente más sencilla, era la adecuada en estos dispositivos.
-
-### Desarrollo del `main` de `members.html`
-
-La sección `main` de la página en la que aparecen los miembros del club se desarrolló de la siguiente manera:
-
-En cuanto al HTML, este se organizó de forma que el contenido principal, con todos los miembros del club, estuviese contenido en un elemento `div` con una clase `member-card-block`. En el código SCSS, se creó una regla en la que se le atribuyó la propiedad `display` con el valor `flex`. Además, con el objetivo de adaptarlo a diferentes tamaños de pantalla sin tener que realizar `@media` _queries_, se atribuyó al mismo elemento las declaraciones siguientes: `flex-wrap: wrap`, que haría que los elementos se plegasen en caso de colisión; `justify-content: space-around`, que permitiría que los elementos quedasen separados entre sí en la misma fila, otorgando espacio y mejorando la estética; y `align-items: center`, que conseguiría que estos quedasen encajados en el mismo plano vertical. Gracias a esta configuración, el número de miembros que aparece por cada fila varía (entre 1 y 3) dependiendo del tamaño del dispositivo desde el que se visualiza la página.
-
-![Muestra de la visualización del elemento desde el inspector de Firefox](doc_imgs/members_flex.png){width=210px}
-
-A cada elemento representando la tarjeta de miembro también se le aplicó la declaración `display: flex` pero conjuntamente con `flex-direction: column`. Esto se hizo así para asegurarnos de que los elementos _interiores_ dentro de cada tarjeta se conformasen verticalmente.
-
-La imagen de cada miembro del club se insertó dentro de un `div` específico con la clase `image-container`. Para darles un aspecto más dinámico, al elemento `img` se le aplicó la declaración `clip-path: circle(50% at 50% 50%)`, realizada a través de [clippy](https://bennettfeely.com/clippy/), que recortaría cada fotografía, otorgándoles un marco circular.
-
-### Desarrollo del `main` de `blog.html`
-
-La página `blog.html` se configuró según el modelo aportado en el enunciado de la práctica.
-
-En la parte superior de la página, se realizó la portada del blog, englobada dentro de un elemento `div` con clase `checked-background`, dentro del cual se utiliza una imagen de fondo que sigue el mismo patrón de colores y formas que la utilizada en la página `main.html`. Esta imagen se introdujo mediante código SCSS a través de la propiedad `background-image` y no como elemento `img` en el HTML. Se utilizaron las declaraciones `background-size: contain` y `background-repeat: round` para permitir que la imagen se adaptase fácilmente a los distintas variaciones de tamaño de los dispositivos desde los que se visualiza. Inmediatamente superior al título, se colocó una imagen representativa del blog, englobada dentro de un elemento `img` con su propio _container_. Para que los elementos de esta parte del blog se dispusieran de forma adecuada, se usaron las declaraciones `display: flex` y `flex-flow: column`.
-
-![Visualización de la portada del blog](doc_imgs/portada_blog.png){width=300px}
-
-El resto del código se concibió dentro de un gran elemento `div` con la clase `narrative-blog`. Este contiene todos los elementos de esta página que no son la portada. 
-
-Tal y como se puede visualizar en los _wireframes_, inmediatamente inferior al título de la entrada del blog, se observa un elemento que muestra dos elementos en una misma fila. Para conseguir esto, se englobó a los elementos en un `div.motto-and-intro` y se utilizó, de nuevo, la declaración `display: flex`. A cada elemento (un elemento `blockquote` y un `p`) se le otorgó una anchura (propiedad `width`) porcentual aproximada correspondiente a la que se ve en los _wireframes_. Con el objetivo de que, ante una reducción del tamaño del _viewport_ estos no quedasen demasiado aplastados, se otorgó al elemento _flex_ la declafración `flex-wrap: wrap`, y a cada hijo de esta se le aplicó `flex: auto`. Esta última declaración permite que, cuando se dé el _wrap_ de los elementos en dispositivos de mayor tamaño, la anchura de los elementos a los que se le aplica crezca hasta adaptarse a la anchura total del elemento en el que se encuentran.
-
-La siguiente parte corresponde a la lista de reglas. Esta se ha concebido como un elemento `ol` (lista ordenada). Cada elemento `li` contiene el título de la regla y la descripción, conformados como elementos `h3` y `p` respectivamente. Se aplicaron algunos estilos a través de la hoja de estilo con el objetivo de seguir la línea estética general de la página.
-
-Para la fotografía que se puede visualizar en la parte media-inferior de la página, se usó el elemento `figure`. Este contiene un `div` que sirve como contenedor para la imagen, y un elemento `figcaption`, para el pie de foto. Se realizaron algunas modificaciones de estilo.
-
-Al final de la página puede hallarse el componente de Bootstrap descrito en la sección «Uso de componentes de Bootstrap: Grupo de tarjetas». El elemento correspondiente a la imagen de la parte superior de cada tarjeta se engloba fue modificado con el siguiente código para poder implementar el fondo de tablero de ajedrez deseado:
-
-```css
-    img.card-img-top {
-      padding-block: 10%;
-      padding-inline: 20%;
-      fill: $text-color;
-      background-image: url("../images/backgrounds/checked_background.png");
-      background-size: contain;
-      background-repeat: round;
+module.exports = {
+  content: ['./src/**/*.{html,js}'],
+  theme: {
+    colors: {
+      transparent: 'transparent',
+      current: 'currentColor',
+      black: colors.black,
+      white: colors.white,
+      gray: colors.gray,
+      emerald: colors.emerald,
+      indigo: colors.indigo,
+      yellow: colors.yellow,
+      'normal-bg-color': 'rgb(245 245 245)',
+      'text-color': 'rgb(31 31 31)',
+      'secondary-contrast-color': 'rgb(204 204 204)',
+      'link-color': 'rgb(51 51 51)',
+      'colorful-element-color': 'rgb(248 221 201)',
+      'lighter-colorful-element-color': 'rgb(254 248 244)',
+      'colorful-element-border-color': 'rgb(253 245 239)',
     }
-```
-
-![Muestra del grupo de tarjetas en dispositivos de mayor tamaño](doc_imgs/cards.png)
-
-El icono `svg` añadido se integró dentro de ese elemento, de forma que apareciese junto al fondo implementado a través de SCSS.
-
-### Desarrollo del `main` de `contact.html`
-
-El código de esta parte de la página corresponde a aquel en el que se describen las FAQ del sitio y se halla el formulario de contacto del club.
-
-Este corresponde, por tanto, al acordeón (componente de Bootstrap mencionado en la sección pertinente), el mensaje informativo y el formulario de contacto. 
-
-El acordeón fue desarrollado ampliamente en la sección hallada más arriba.
-
-El mensaje informativo, que incluye en sí mismo dos componentes de Bootstrap (el mensaje en sí y el botón de cierre del mensaje), se adaptó a la estética deseada de la página. Aunque el mensaje en sí recibió casi todas sus modificaciones a través del _overriding_ de variables por defecto de Bootstrap mediante mapeo, el botón de cerrado sí tuvo que recibir una personalización significativa a través del código SCSS:
-
-```css
-button.close {
-  position: absolute;
-  font-size: 1.5em;
-  top: 1px;
-  right: 5px;
-  border: none;
-  background-color: transparent;
-  align-items: right;
-  justify-content: right;
-  color: $darker-pink;
-  cursor: pointer;
+  }
 }
 ```
 
-En cuanto al formulario, hay que tener en cuenta que la funcionalidad del mismo está limitada al no haber programado el código correspondiente al _server-side_. Este se desarrolló como un elemento `form`, que contiene elementos `input` y `textarea` asociados a etiquetas, configuradas como elementos `label`. Se añadió un elemento `div` en el que contener la `checkbox` junto al texto explicativo. Se modificó ampliamente la hoja de estilos para adaptar su diseño a los estándares de la página. 
+Se puede observar como se añadieron las variables usadas en los archivos `blog.html` y `members.html` (estas aparecen en las posiciones finales del objeto). También se añadieron colores nativos de Tailwind, con el objetivo de usarlos puntualmente para ciertos tonos fuera de la temática de colores de la página web. Para poder acceder a ellos, hubo de importarse el módulo `colors`:
+
+```js
+const colors = require('tailwindcss/colors')
+```
+
+Asimismo, se configuraron las dos fuentes utilizadas en la tipografía de la paǵina web. Estas se configuraron como parte del objeto `FontFamily`, de la siguiente manera:[^1]
+
+```js
+fontFamily: {
+  normal: ['JetBrains Mono', 'monospace'],
+  serif: ['EB Garamond', 'serif']
+}
+```
+
+También se configuró un valor estándar (`normal`) para la propiedad `border-radius`, con el objetiov de proporcionar estandarización a este tipo de estilo de bordes.
+
+```js
+extend: {
+  borderRadius: {
+    'normal': '1em'
+  }
+}
+```
+
+Además, se realizaron las importaciones necesarias en el archivo `main.scss` para que la herramienta funcione correctamente:
+
+```css
+/** Tailwind */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+```
+
+## Configuración de Postcss
+
+Tras su instalación, Tailwind no funcionaba en el proyecto. Esto fue así porque se debía de configurar como un plugin de Postcss y no como una dependencia aislada. Para realizar tal acción, se creó un archivo JSON `.postcssrc`. En este, se especificó la inclusión de Tailwind como plugin.
+
+```json
+{
+    "plugins": {
+        "tailwindcss": {},
+        "posthtml-include": {}
+    }
+}
+```
+
+Esto permitió el buen funcionamiento de la librería de utilidades.
+
+## Configuración de VSCode
+
+Con el objetivo de prevenir los errores generados por VSCode ante la inclusión de _at-rules_ propias de Tailwind como `@apply`, `@layer` y `@tailwind`, se modificó la configuración de VSCode para ignorar este tipo de inclusiones en el código SCSS. Esto se realizó a través de la modificación de las preferencias, cambiando las preferencias sobre actuación de SCSS ante reglas _at-rule_ no conocidas de «warning» a «ignore».
+
+![menú en el que se configuran las alertas para las _at rules de VSCode](doc_imgs/VSCode%20change.png)
+
+Una vez realizado el cambio, VSCode no alertó de ninguna _at rule_ desconocida.
+
+Además, adicionalmente y como ayuda ante la redacción del código relativo a las _utilities_ de Tailwind, se instaló la extensión de VSCode Tailwind CSS IntelliSense. Esta incluye:
+
+* Autocompletado de código relativo a Tailwind.
+* Linteo, con resaltación de errores.
+* Previsualización al realizar _hover_ sobre el código.
+* Modo de lenguaje Tailwind CSS.
+
+La herramienta fue especialmente útil en la práctica, especialmente la opción de _hover_ sobre el código, ya que te permite conocer el equivalente CSS al código redactado como _utility_ de Tailwind.  
+
+## Modificaciones en el sistema de ficheros
+
+Se relizaron algunas modificaciones al sistema de ficheros respecto al del proyecto original. Se renombró la página SCSS en la que se situaba la hoja de estilos principal a `_directives.scss`, ya que es este tipo de contenido el que incluye en el proyecto actual. Se eliminaron los archivos de las páginas que no se recrearían, ya que el enunciado de la práctica requería la elaboración de dos de ellas. Se renombró `blog.html` a `index.html` para colocarla como página principal.
+
+# Preguntas específicas sobre utility-first CSS
+
+* ¿Qué diferencias hay entre el enfoque de tipo CSS semántico (el que usaste en las otras PEC) y el CSS de utilidades? ¿Cómo afectó esto a tu proceso de desarrollo? ¿Y a tu código?
+
+
+* ¿Qué diferencias encontraste entre usar una librería de componentes y una librería de utilidades?
+
+
+* ¿Qué clases y componentes decidiste extraer y por qué?
+
+
+
+
+# Recreación de la página web
+
+Una vez realizada la instalación de las dependencias, se procedió a recrear los archivos `index.html` (antes `blog.html`) y `members.html`.
+
+Ya que la práctica requería un enfoque basado en Atomic CSS, con el objetivo de estandarizar la redacción de la misma, se tomaron las siguientes decisiones antes de dar comienzo a la redacción del código:
+
+* A la hora de desarrollar el código relativo a elementos únicos, se realizaría un enfoque atómico puro, es decir, realizando adiciones de estilo a través del atributo `class` dentro de la línea de código HTML. Dependiendo de la complejidad del elemento y su situación respecto al resto de elementos de la página, en ocasiones de dejó la clase original aún cuando esta no posee ninǵun estilo asignado a la misma. Esto se hizo de tal forma con el objetivo de identificar más fácilmente los elementos en el código.
+* En cuanto al desarrollo de elementos que se repiten en la página web o que poseen una amplia cantidad de estilos, este se realizó a través de un abordaje mediante directivas. En concreto, estas se desarrollarían en el archivo `_directives.scss`, a través de las `at-rules`: `@layer`, que sirve para identificar la función del elemento al que se le aplican los estilos dentro del código, pudiendo ser este `@component` o `@base`; y `@apply`, que se usa para introducir las propiedades y sus valores. 
+
+Para el desarrollo del proyecto en su totalidad, se hizo uso de la [página](https://delightful-kashata-ab932a.netlify.app) a la que se había subido el proyecto de la PEC2. Mediante el inspector de estilos, se identificaron las reglas CSS aplicadas a los diferentes elementos y, haciendo uso de la extensa descripción de las utilidades proporcionada en la [página de documentación de Tailwind](https://tailwindcss.com/docs). Se aplicaron los estilos originales mediante Tailwind con la mayor fidelidad posible.
+
+## Desarrollo en Tailwind de encabezado y pie de página
+
+Al ser ambos elementos comunes a las dos páginas, estos se desarrollarán en esta sección individual.
+
+Para el desarrollo del encabezado, Se sustituyeró el código original por clases Tailwind. Se dio preferencia a las unidades nativas de Tailwind, pero cuando estas no proporcionaban un resultado satifactorio, se hizo empleo de _bracket notation_ para establecer la unidad original. Por ejemplo:
+
+```html
+<div class="mx-auto w-[90%] max-w-[1000px] flex justify-between items-center">
+```
+
+Se eliminó el código relativo a la apertura y cierre del menú de navegación. Esto se realizó así porque, al haber ahora solo dos opciones, el menú permanece visible y sin problemas de formato incluso cuando la página web se visualiza a través de dispositivos de menor tamaño.
+
+```html
+<nav class="z-950" id="primary-navigation">
+  <ul class="flex" role="list">
+    <li class="menu-item"><a href="members.html">Members</a></li>
+    <li class="menu-item"><a href="index.html">Blog</a></li>
+  </ul>
+</nav>
+```
+
+La sección de navegación principal del sitio web está ahora contenida dentro de un elemento `nav` con una clase `z-950`, que establece un índice que asegurar que la navegación se muestre por encima de otros elementos. El nav contiene una lista desordenada `<ul>` con una clase `flex`, que utiliza Flexbox para alinear los elementos en una fila. Cada elemento de la lista `<li>` tiene una clase `menu-item` y contiene un enlace `<a>` que lleva a las dos páginas del sitio web. A la clase `menu-item` se le aplica la directiva siguiente, mediante `@apply`:
+
+```css
+.menu-item {
+  @apply px-8;
+}
+```
+
+En cuanto al pie de página, al componerse este de elementos mayormente únicos, se tomó un enfoque similar:
+
+```html
+<footer class="bg-secondary-contrast-color py-8 text-[.9em]">
+```
+
+Aquí se establece la clase `bg-secondary-contrast-color` que se aplicará al fondo del pie de página y la clase `py-8` para agregar un _padding_ vertical de 8 unidades. También se establece el tamaño del texto en 0.9em mediante _bracket notation_, ya que Tailwind no posee una unidad nativa que se corresponda a tal cantidad de em.
+
+```html
+<div class="w-[90%] max-w-[1000px] justify-around my-0 mx-auto pt-4 flex items-center">
+```
+
+Este div posee el contenido principal del pie de página. Se utiliza la clase `w-[90%]` para establecer un `width` del 90% del contenedor principal. La clase `max-w-[1000px]` establece un ancho máximo de 1000 píxeles. En el proyecto original, ambas clases se correspondían a una única propiedad de función CSS `min(90%, 1000px)`, pero al no admitirse en Tailwind, esta se tuvo que desarrollar así. Las clases `justify-around`, `my-0`, `mx-auto` y `pt-4` se utilizan para ajustar el diseño del contenido del pie de página. La clase `flex` crea un contenedor flexible que alinea los elementos horizontalmente.
+
+```html
+<div class="px-2">
+```
+
+Este div contiene el contenido del lado izquierdo del pie de página. Se utiliza la clase `px-2` para agregar un relleno horizontal de 2 unidades, equivalente a `0.5em`.
+
+```html
+<div class="button-box">
+  <button class="button hover:bg-colorful-element-color type=" button">Contact</button>
+</div>
+```
+
+Aquí se encuentra un contenedor con la clase `button-box` que envuelve un botón. El botón tiene las clases `button` y `hover:bg-colorful-element-color` para aplicar estilos específicos y cambiar su fondo al pasar el cursor por encima.
+
+```html
+<div class="py-4">
+  <p class="my-4">
+    Download our app
+  </p>
+  <div class="justify-evenly flex">
+    <!-- Aquí se hallan los iconos -->
+  </div>
+</div>
+```
+
+Este div contiene un párrafo con la clase `my-4` para agregar un margen vertical de 4 unidades, lo que se corresponde a `1em`. Dentro del div hay otro div con las clases `justify-evenly` y `flex`, que se utilizan para alinear y distribuir equitativamente los elementos de su interior.
+
+```html
+<div class="right-side-footer">
+  <p class="font-bold my-4">Information</p>
+  <div class="col3">
+    <ul>
+      <!-- Aquí se hallan los elementos de la lista -->
+    </ul>
+  </div>
+</div>
+```
+En este div se encuentra el contenido del lado derecho del pie de página. El párrafo tiene la clase `font-bold` para aplicar un estilo de fuente en negrita. Dentro del `div` hay otro `div` con la clase `col3` que contiene una lista desordenada (`ul`).
+
+```html
+<div class="sub-footer w-[90%] max-w-[1000px] border border-t-text-color border-b-transparent border-x-transparent flex justify-between mt-8 mx-auto mb-0">
+```
+
+En este div se define la sección inferior del pie de página, que se coloca debajo del contenido principal. Se utilizan las clases `w-[90%]` y `max-w-[1000px]` para establecer el ancho de la sección. Además, se agrega un borde superior mediante las clases `border`, `border-t-text-color`, `border-b-transparent` y `border-x-transparent`. La clase `flex` se utiliza, de nuevo, para alinear los elementos del mismo horizontalmente, y la clase `justify-between` los separa `equitativamente`.
+
+En el interior de este `div`, se halla el siguiente código:
+
+```html
+  <div class="logo-in-footer">
+    <a href="index.html">
+      <img class="main-logo w-[5em] h-auto" src="./assets/images/main_logo.svg" alt="Main logo of the website">
+    </a>
+  </div>
+  <div class="pages-in-footer flex justify-center items-center">
+    <ul class="flex">
+      <li class="after:content-['|'] after:pl-4 pr-[1.25em]"><a href="">Members</a></li>
+      <li class="after:content-['|'] after:pl-4 pr-[1.25em]"><a href="">Blog</a></li>
+      <li><a href="">Contact & FAQ</a></li>
+    </ul>
+  </div>
+  <div class="social-media-icons flex justify-evenly w-[8em]">
+    <!-- Iconos -->
+  </div>
+```
+
+Que paso a explicar punto a punto:
+
+* `logo-in-footer` contiene el logotipo principal del sitio web y se coloca en el lado izquierdo del subfooter. El logotipo está envuelto en un elemento `a` que conduce a la página principal `index.html`. El logotipo se engloba como elemento con la etiqueta `img`, con la clase main-logo que establece el ancho (`w-[5em]`) y la altura automática (`h-auto`).
+* `pages-in-footer` muestra una lista de enlaces de las páginas del proyecto. La lista se coloca en el centro del subfooter utilizando las clases `flex`, `justify-center` e `items-center`, ya desarrolladas en elementos anteriores. Cada enlace de página se representa como un elemento de lista (`li`) y se muestra en línea utilizando la clase `flex`. Además, se agrega un separador vertical utilizando la pseudo-clase `after` y algunas clases de espaciado (`after:content-['|']`, `after:pl-4` y `pr-[1.25em]`).
+* `social-media-icons` describe los íconos de las redes sociales. Los íconos son representados por etiquetas `svg` y se muestran en línea utilizando las clases `flex` y `justify-evenly`. Cada ícono de red social tiene una clase `mx-2` para agregar un margen horizontal de 2 unidades y la clase `cursor-pointer` para establecer el cursor del mouse como un puntero al pasar por encima.
+
+## Desarrollo en Tailwind de `index.html`
+
+
+### Desarrollo en Tailwind de `members.html`
+
+
+
 
 
 # Publicación del sitio web
@@ -372,7 +300,6 @@ Este se publicó en la siguiente URL:
 [https://delightful-kashata-ab932a.netlify.app/index.html](https://delightful-kashata-ab932a.netlify.app/index.html)
 
 # Propiededad intelectual: atribución
-
 Aquí se realiza la atribución debida a los autores de los elementos externos utilizados en el proyecto. Todos ellos poseen una licencia compatible con su uso por parte de terceros, con una serie de condiciones según el tipo de licencia Creative Commons asignada.
 
 * En cuanto a los iconos utilizados en la página (incluído el favicon), se usó el paquete de Sports de ainul muttaqin en The Noun Project (disponible [en este enlace](https://thenounproject.com/browse/collection-icon/sports-118176/?p=1)), liberados bajo licencia CC BY 3.0. Sirva este punto como atribución.
@@ -381,8 +308,4 @@ Aquí se realiza la atribución debida a los autores de los elementos externos u
 
 * Las foto de torneo «Players at a chess tournament» fue descargada de Wikimedia Commons. Su autor es Andreas Kontokanis, que la liberó bajo licencia CC BY-SA 2.0 (disponible [en este enlace](https://commons.wikimedia.org/wiki/File:Noutsos_Stamoulis_chess_tournament.jpg)). Sirva este punto como atribución.
 
-[^1]: Se ignoraron los errores en los archivos de la carpeta `src/views`, al ser estos trozos de HTML que serían incorporados en otros archivos HTML y que por tanto daban errores relacionados con la ausencia de elemento `head`. 
-
-[^2]: `deg` no era una unidad admitida por nuestro código en `.stylelintrc.json`, por lo que tuvo que ser incluida para que no diese errores.
-
-[^3]: La falta de elegibilidad de las imágenes generadas por inteligencia artificial para la protección de derechos de autor se debe a la ausencia de autoría humana. Aunque los algoritmos utilizados para generar estas imágenes son el resultado de la creatividad y el esfuerzo intelectual humano, la imagen resultante en sí misma es considerada por expertos como carente de originalidad humana y, por lo tanto, no cumpliría los requisitos para la protección de derechos de autor. Esta situación podría cambiar dependiendo del sentido de la jurisprudencia, pero al no existirla, se interpreta que tal protección no existe.
+[^1]: La fuente EbGaramond se añadió porque se utilizaba en la portada del proyecto. Al no incluirse la portada en las dos páginas incluidas en esta práctica, no se hizo ningún uso práctico de ella en la elaboración de esta PEC.
