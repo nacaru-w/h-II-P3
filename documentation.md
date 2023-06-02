@@ -11,15 +11,14 @@ header-includes:
 ---
 
 El enlace al respositorio de github utilizado es el siguiente:
-[https://github.com/nacaru-w/h-II-P2](https://github.com/nacaru-w/h-II-P2)
+COMPLETAR
 
 La página web subida en Netlify puede consultarse aquí:
-[https://delightful-kashata-ab932a.netlify.app/index.html](https://delightful-kashata-ab932a.netlify.app/index.html)
-
+COMPLETAR
 
 # Instalación del boilerplate y creación del repositorio
 
-Al igual que en la PEC1, el primer paso que se llevó a cabo en la realización de esta PEC fue la instalación de [UOC boilerplate](https://github.com/uoc-advanced-html-css/uoc-boilerplate). 
+Al igual que en las PECs anteriores, el primer paso que se llevó a cabo en la realización de esta PEC fue la instalación de [UOC boilerplate](https://github.com/uoc-advanced-html-css/uoc-boilerplate). 
 
 Se creó un nuevo repositorio git local y lo vinculé a un repositorio remoto asociado a mi cuenta de Github. Este se puede consultar a través de la siguiente URL:
 
@@ -27,94 +26,26 @@ Se creó un nuevo repositorio git local y lo vinculé a un repositorio remoto as
 
 Esto permitiría tener un sistema de control de cambios, pudiendo revertir a un estado anterior en caso de necesitarlo. La habilitación de un repositorio público es necesaria para la publicación de la página a través de Netlify.
 
-A continuación, instalé las dependencias del boilerplate a través de `npm` mediante el comando de terminal `npm install`. Después, se instaló Stylelint mediante el siguiente comando:
+A continuación, instalé las dependencias del boilerplate a través de `npm` mediante el comando de terminal `npm install`. Se usaron las mismas dependencias que en la PEC anterior, eliminándose, además, `stylelint` y `bootstrap`. Después, se instaló Tailwind mediante el siguiente comando:
 
 ```bash
-npm install --save-dev stylelint stylelint-config-standard-scss
+npm install tailwindcss --save-dev
 ```
 
 Se añadió, por cuestiones de hábito, un script para el comando `npm run start`, que realiza las mismas funciones que `npm run build` en el archivo `package.json`.
 
-Se creó el archivo `.stylelintrc.json`, con la configuración adaptada a los criterios de la guía de estilo, descritos en el siguiente párrafo y en la siguiente sección.
+Aunque para esta práctica no se utilizó una guía de estilo, se siguió usando el linter de código personalizado instalado localmente en mi dispositivo. Este realiza una serie de modificaciones (cambia aspectos como el indentado, el número de saltos de línea, etc) cada vez que realizo un guardado en la aplicación VSCode.
+## Configuración de Tailwimd
 
-Como guía de estilo principal, tanto para HTML y CSS, se decidió utilizar la guía de [https://codeguide.co/](https://codeguide.co/). Se utilizó esta guía de estilo teniendo en cuenta que incluye directrices para el código HTML y CSS y que estas no entran mucho en profundidad. Se hizo de esta forma teniendo en cuenta que ya estaba familizarizado con esta guía ya que la había aplicado en el desarrollo de la PEC1.
+Se comenzó por crear un archivo de configuración de Tailwind, esto se realizó a través del siguiente comando en la consola:
 
-Independientemente de esta guía de estilo, yo como usuario utilizo un linter de código personalizado que realiza una serie de modificaciones (cambia aspectos como el indentado, el número de saltos de línea, etc) cada vez que realizo un guardado en la aplicación VSCode. Esto puede entrar en conflicto con algunas de las reglas especificadas en la guía de estilo elegida. El linter personalizado que uso lleva aplicándose en todos mis proyectos durante años, así que decidí dar prioridad a las modificaciones realizadas por este ante las recomendaciones de codeguide.co, intentando siempre llegar a un punto en común entre ambos.
-
-Se llevó a cabo una revisión de las normas que se podrían agregar a `.stylelintrc.json` para cumplir con los criterios establecidos.
-
-Inicialmente, se estudiaron y memorizaron los criterios, y se realizaron evaluaciones periódicas para verificar su cumplimiento. Además, se corrigieron los errores reportados por Stylelint durante la compilación para producción utilizando el comando npm run start.
-
-## Configuración de `stylelint` y configuración de las reglas: ejecución pŕactica de criterios
-
-Se modificó el archivo de configuración de Stylelint en `.stylelintrc.json`. Por defecto, se aplican las reglas especificadas en la configuración estándar SCSS de Stylelint ([accesible aquí](https://github.com/stylelint-scss/stylelint-config-standard-scss/blob/main/index.js)). Además, con el objetivo de estandarizar el uso de unidades en el código de la hoja de estilo, se decidió añadir una regla específica que restringiese la cantidad de unidades posibles:
-
-```json
-{
-    "extends": "stylelint-config-standard-scss",
-    "rules": {
-        "unit-allowed-list": [
-            "em",
-            "rem",
-            "px",
-            "%",
-            "deg",
-            "vw",
-            "fr",
-            "s",
-            "vmax"
-        ]
-    }
-}
+```bash
+npx tailwindcss init
 ```
 
-Asimismo, se modificaron los scripts del archivo `package.json` para añadir la ejecución de Stylelint cara vez que se ejecute `npm run build`, de la siguiente forma:
+Una vez creado el _boilerplate_ del archivo de configuración, se procedió a introducir los colores que se habían asignado en la PEC2 a variables SCSS.
 
-```json
-{
-    "build": "npm-run-all clean parcel:build stylelint",
-    "start": "npm-run-all clean parcel:build stylelint",
-    "stylelint": "stylelint src/**/*.scss"
-  }
-```
 
-También se añadió una regla que tiene como objetivo estandarizar el nombre de las clases, tal y como se recomienda en la guía de estilo elegida. Esto se hizo a través de una regla que permite especificar el patrón de los selectores de clase de Stylelint con la especificación de una expresión regular como valor:
-
-```json
-"selector-class-pattern": "^[a-z0-9]+(-[a-z0-9]+)*$"
-```
-
-Asimismo, se añadió otra regla para obligar a los desarrolladores a utilizar comilllas dobles ( "" ) en lugar de comillas simples ( '' ) en la denotación de los `string` del proyecto. Esto también se realizó a través de la adición de una regla de Stylelint:
-
-```json
-"string-quotes": "double"
-```
-
-En la ejecución del comando `stylint` aparece un mensaje que avisa de que la regla se encuentra obsoleta (_deprecated_), pero para los objetivos de esta práctica, después de una revisión de su funcionamiento, se decidió mantener.
-
-Algo que se realizó también fue la adición de la obligación de aplicar la notación moderna en la especificación de colores. Esto se realizó mediante la introducción de la siguiente línea de código:
-
-```json
-"color-function-notation": "modern"
-```
-
-Como excepción se introdujo la eliminación de la regla `no-descending-specificity`, que se aplica por defecto en la configuración estándar `stylelint-config-standard-scss`. Esto se hizo porque daba falsos errores al no identificar correctamente la especificidad de los elemetos debido al `nesting` de SCSS. Lo recomienda la documentación de la siguiente forma en proyectos que usan mucho _nesting_:
-
->This rule enforces that practice as best it can, reporting fewer errors than it should. It cannot catch every actual overriding selector, but it can catch certain common mistakes. We recommend turning this rule off if you use a lot of nesting.
-
-Las recomendaciones de _nesting_ aplicadas fueron las descritas en el apartado «[Nesting in Sass and Less](https://markdotto.com/2015/07/20/css-nesting/)» de la guía de estilo utilizada.
-
-También se desactivó la regla estándar `comment-no-emptyp` que forma parte del conjunto de reglas `stylelint-config-standard-scss`. Esta regla emite errores cuando, en la compilación, encuentra que existen comentarios `//` que no son seguidos de ningún carácter. Para poder jerarquizar los comentarios conforme a las pautas de la guía de estilo de codeguide.co, los comentarios que se construyen como títulos de secciones se disponen englobados de este tipo, razón por la que se añadió esta excepción. Esto se hizo igualmente a través de una modificación en el archivo `.stylelintrc.json` de la siguiente forma:
-
-```json
-"scss/comment-no-empty": null
-```
-
-Asimismo, se añadió una excepción a la regla `declaration-block-no-duplicate-properties`. Esto se hizo porque interfería en las variables que se declararon para realizar el _override_ de los estilos por defecto de los componentes de Bootstrap. Se hizo de forma similar al resto de excepciones:
-
-```json
-"declaration-block-no-duplicate-properties": null 
-```
 
 ### Justificación y aplicación según la guía de estilo
 

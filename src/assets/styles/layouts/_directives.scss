@@ -1,0 +1,65 @@
+@layer components {
+  .menu-item {
+    @apply px-8;
+  }
+
+  .blog-paragraph {
+    @apply m-0 py-4;
+  }
+
+  .checked-background {
+    @apply flex flex-col justify-center items-center text-center h-80 w-full bg-[url('../images/backgrounds/checked_background.png')] bg-contain bg-repeat-round;
+  }
+
+  .rule-title {
+    @apply text-[1.2em] my-6 font-semibold;
+  }
+
+  .rule-description {
+    @apply py-4 ml-8;
+  }
+
+  .card {
+    @apply flex-grow-[1] flex-shrink-0 basis-[0%] border rounded-md bg-[#fff] flex-col flex-wrap min-w-[13em];
+  }
+
+  .card-img-top {
+    @apply bg-[url('../images/backgrounds/checked_background.png')] bg-repeat-round bg-contain py-[10%] px-[20%] w-[100%];
+  }
+
+  .card-body {
+    @apply p-4 text-[.85em];
+  }
+
+  .card-title {
+    @apply font-bold underline text-center p-6;
+  }
+
+  .button {
+    @apply w-[142px] cursor-pointer rounded-[6px] my-0 mx-auto py-[.75em] px-[.5em] text-[.8em] font-bold bg-normal-bg-color;
+  }
+}
+
+.say-chess {
+  text-shadow: 2px 2px lightcoral;
+}
+
+a {
+  text-decoration: none;
+  color: $text-color;
+  transition: color 1s ease;
+}
+
+a:hover {
+  color: $darker-colorful-element-color;
+  text-decoration: underline;
+}
+
+a:visited {
+  color: none;
+}
+
+svg:hover {
+  fill: $darker-colorful-element-color;
+  transition: fill 1s ease;
+}
