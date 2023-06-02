@@ -145,13 +145,19 @@ Se relizaron algunas modificaciones al sistema de ficheros respecto al del proye
 
 * ¿Qué diferencias hay entre el enfoque de tipo CSS semántico (el que usaste en las otras PEC) y el CSS de utilidades? ¿Cómo afectó esto a tu proceso de desarrollo? ¿Y a tu código?
 
+Se trata de enfoques muy diferentes. En el primer caso, aplicas los estilos mediante selectores CSS que encuentran elementos, clases, ids, etc a los que adjudicar las propiedades y sus valores descritos en las reglas. En el enfoque de utiliades, se utilizan utilidades preconfiguradas por Tailwind (o personalizadas) y estas se aplican a cada elemento en forma de clases. En casos en los que no resulta eficaz hacerlo así, existe la aplicación mediante la directiva `@apply`, que utiliza un enfoque más parecido al semántico.
+
+Para mí esto supuso un enorme cambio de enfoque de desarrollo. Por una parte, el enfoque atómico permite aplicar la mayoría de estilos _on the go_ a la vez que va describiéndose el código HTML, lo cual puede ser aventajoso a la hora de ahorrar tiempo. Por otro lado, haber utilizado Tailwind implica haber tenido que familiarizarse con la nomeclatura de sus utilidades, por lo que, de alguna forma, ha supuesto tener que volver a aprender 
 
 * ¿Qué diferencias encontraste entre usar una librería de componentes y una librería de utilidades?
 
+Son conceptos ampliamente distintos. Una librería de componentes te construye componentes completos, es decir, te construye elementos total o parcialmente, y esto puede incluir el código HTML, los estilos e incluso el javascript asociado. Una librería de utilidades, en este caso Tailwindcss, incluye formas predefinidas de aplicar estilos. En general, el sentido de una librería de utilidades es más ligero, con un uso más específico y complementario; por otr olado, una librería de utilidades te da las piezas que componen la web ya creadas, y uno puede decidir si modificarlas o no a _posteriori_. 
 
 * ¿Qué clases y componentes decidiste extraer y por qué?
 
+Las clases extraidas se encuentran descritas exhaustivamente, incluida su justificación, en el desarrollo del código que se explica en el apartado posterior. De forma resumida, podemos afirmar que el criterio principal para extraer las clases y aplicarlas mediante directiva fue la existencia de un elemento que se repite con frecuencia a lo largo de la web, y la presencia de una cantidad significativa de propiedades CSS que deben aplicarse al elemento.
 
+En cuanto a los componentes, se eligió el set de reglas descrito en la página principal y los blogs de previsualización hallados al final de la página. La principal razón por la que se extrayeron estos componentes es porque puede considerarse que son de carácter cambiante, por lo que acceder individualmente a ese código permite realizar sus modificaciones frecuentes de manera más sencilla. 
 
 
 # Recreación de la página web
@@ -366,7 +372,7 @@ El primer elemento es un bloque de citas `<blockquote>` con las clases `text-lg`
 
 El segundo elemento es un párrafo `<p>` con las clases `blog-paragraph`, `flex-auto` y `w-2/3`. Las clases `flex-auto` y `w-2/3` indican que el párrafo debe ocupar un ancho flexible y que debe ocupar el 66.67% del ancho del contenedor.
 
-A continuación se describe el código relativo a las reglas:
+A continuación se describe el código relativo a las reglas:[^2]
 
 ```html
 <div class="rule-set">
@@ -458,7 +464,7 @@ Después se describió el código relativo a la previsualización de otros _post
 </div>
 ```
 
-En este caso, los elementos se dispusieron dentro de un contenedor que usa `flex`, para que estos se distribuyan de forma horizontal. Se aplicó `flex-wrap` para que en dispositivos de menor tamaño, estos se replieguen. El contenido de las tarjetas y su interior se definió mediante directivas:
+En este caso, los elementos se dispusieron dentro de un contenedor que usa `flex`, para que estos se distribuyan de forma horizontal. Se aplicó `flex-wrap` para que en dispositivos de menor tamaño, estos se replieguen. El contenido de las tarjetas y su interior se definió mediante directivas:[^3]
 
 ```css
   .card {
@@ -548,6 +554,22 @@ Finalmente, existe un elemento que anima a los lectores a hacerse miembros, desc
 
 En este caso, se le aplica un estilo de _padding block_ de 8 unidades (`2em`), así como un margen en el mismo eje de 4 unidades (`1em`). 
 
+## Uso de posthtml-include
+
+La práctica también requería el uso de esta dependencia, para poder utilizarla, se creó el archivo `.posthtmlrc` en la raíz del proyecto. A continuación, se describió el contenido del archivo JSON:
+
+```json
+{
+    "plugins": {
+        "posthtml-include": {
+            "root": "./src"
+        }
+    }
+}
+```
+
+Esto establecería la raíz del proyecto en la carpeta `./src`. A continuación, se crearon dos archivos `component.html` y `component2.html`. Al primero se migró el código HTML relativo a las reglas, explicado en la sección anterior. En el segundo se incluyó la caja de previsualización de otros posts. Ambos en el archivo `index.html`.
+
 # Publicación del sitio web
 Para la publicación de la web en internet se utilizó el servicio Netlify. Este permite la publicación de la página a partir de un repositorio público alojado en GitHub.
 
@@ -559,7 +581,7 @@ Este se publicó en la siguiente URL:
 
 [https://delightful-kashata-ab932a.netlify.app/index.html](https://delightful-kashata-ab932a.netlify.app/index.html)
 
-# Propiededad intelectual: atribución
+# Propiedad intelectual: atribución
 Aquí se realiza la atribución debida a los autores de los elementos externos utilizados en el proyecto. Todos ellos poseen una licencia compatible con su uso por parte de terceros, con una serie de condiciones según el tipo de licencia Creative Commons asignada.
 
 * En cuanto a los iconos utilizados en la página (incluído el favicon), se usó el paquete de Sports de ainul muttaqin en The Noun Project (disponible [en este enlace](https://thenounproject.com/browse/collection-icon/sports-118176/?p=1)), liberados bajo licencia CC BY 3.0. Sirva este punto como atribución.
@@ -569,3 +591,7 @@ Aquí se realiza la atribución debida a los autores de los elementos externos u
 * Las foto de torneo «Players at a chess tournament» fue descargada de Wikimedia Commons. Su autor es Andreas Kontokanis, que la liberó bajo licencia CC BY-SA 2.0 (disponible [en este enlace](https://commons.wikimedia.org/wiki/File:Noutsos_Stamoulis_chess_tournament.jpg)). Sirva este punto como atribución.
 
 [^1]: La fuente EbGaramond se añadió porque se utilizaba en la portada del proyecto. Al no incluirse la portada en las dos páginas incluidas en esta práctica, no se hizo ningún uso práctico de ella en la elaboración de esta PEC.
+
+[^2]: Nótese que, aunque se describe en este apartado, el código HTML no se encuentra en el archivo `index.html`, sino que es transcluido a través de la dependencia `posthtml-include` a partir del archivo `component.html` mediante la etiqueta `<include>`.
+
+[^3]: Téngase en cuenta que, a pesar de que se describe en este apartado, este código no se encuentra en el archivo `index.html`, sino que es transcluido a través de la dependencia `posthtml-include` a partir del archivo `component2.html` mediante la etiqueta `<include>`.
