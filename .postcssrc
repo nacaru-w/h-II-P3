@@ -1,6 +1,5 @@
 {
     "plugins": {
-        "tailwindcss": {},
-        "posthtml-include": {}
+        "tailwindcss": {}
     }
 }
