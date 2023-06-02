@@ -279,14 +279,274 @@ Que paso a explicar punto a punto:
 * `pages-in-footer` muestra una lista de enlaces de las páginas del proyecto. La lista se coloca en el centro del subfooter utilizando las clases `flex`, `justify-center` e `items-center`, ya desarrolladas en elementos anteriores. Cada enlace de página se representa como un elemento de lista (`li`) y se muestra en línea utilizando la clase `flex`. Además, se agrega un separador vertical utilizando la pseudo-clase `after` y algunas clases de espaciado (`after:content-['|']`, `after:pl-4` y `pr-[1.25em]`).
 * `social-media-icons` describe los íconos de las redes sociales. Los íconos son representados por etiquetas `svg` y se muestran en línea utilizando las clases `flex` y `justify-evenly`. Cada ícono de red social tiene una clase `mx-2` para agregar un margen horizontal de 2 unidades y la clase `cursor-pointer` para establecer el cursor del mouse como un puntero al pasar por encima.
 
-## Desarrollo en Tailwind de `index.html`
+## Desarrollo en Tailwind de la parte principal de `index.html`
 
+Para la parte principal de esta página (_header_ y _footer_ han sido descritos en la sección anterior) se aplicó un elemento `main` que engloba todo el código. A este se le aplicaron las clases relativas al fondo `bg-normal-bg-color` (nótese que aquí se le aplica una clase definida en `tailwind.config.js`) y se estableció como fuente predeterminada para la página la fuente introducida en la configuración mediante `font-normal`.
 
-### Desarrollo en Tailwind de `members.html`
+La sección `checked-background` se configuró a través de una directiva, introducida con `@apply`:
 
+```css
+.checked-background {
+  @apply flex flex-col justify-center items-center text-center h-80 w-full bg-[url('../images/backgrounds/checked_background.png')] bg-contain bg-repeat-round;
+}
+```
 
+Esta aplica las siguientes utilidades:
 
+* `flex`: Establece el contenedor como un _flex container_.
+* `flex-col`: coloca los primeros elementos descendientes en una columna vertical dentro del contenedor flex.
+* `justify-center`: centra verticalmente los elementos secundarios dentro del contenedor `flex`.
+* `items-center`: centra horizontalmente los elementos secundarios dentro del contenedor flex.
+* `text-center`: centra el texto dentro de los elementos secundarios.
+* `h-80`: establece la altura del contenedor en 80 unidades de Tailwind.
+* `w-full`: establece el ancho del contenedor al 100% del ancho disponible.
+* `bg-[url('../images/backgrounds/checked_background.png')]`: establece la imagen de fondo del contenedor utilizando la URL proporcionada. En este caso, la URL apunta a la imagen `checked_background.png`, ubicada en la carpeta de imágenes del proyecto.
+* `bg-contain`: ajusta el tamaño de la imagen de fondo para que se ajuste completamente dentro del contenedor sin distorsionarla, manteniendo la relación de aspecto original.
+* `bg-repeat-round`: repite la imagen de fondo tanto horizontal como verticalmente, creando un efecto de mosaico redondeado.
 
+A continuación se introduce la imagen que contiene el logo del blog, así como el título del mismo y los autores:
+
+```html
+<div class="w-40 h-auto">
+  <img class="w-full h-auto" src="assets/images/blog_logo.svg" alt="">
+</div>
+<h2 class="m-1 text-2xl font-bold"><span class="say-chess [text-shadow: 2px 2px lightcoral]">Say chess!</span> a
+  blog that
+  keeps
+  you
+  in check
+</h2>
+<span>
+  by Aleksandar Srebrenica and
+  Catalina Borràs </span>
+```
+
+El primer elemento `div` tiene las clases `w-40` y `h-auto`, lo que establece su ancho en 40 unidades y ajusta automáticamente su altura en función del contenido. Sirve como contenedor para la imagen principal del logo.
+
+El elemento `img` tiene las clases `w-full` y `h-auto`, lo que hace que se estire para ocupar todo el ancho de su contenedor.
+
+El elemento h2 tiene las clases `m-1`, `text-2xl` y `font-bold`, lo que establece un margen de 1 unidad alrededor del título, aumenta el tamaño del texto a `2xl` y convierte el texto a negrita.
+
+El elemento `span` incluye un estilo _inline_ `text-shadow: 2px 2px lightcoral`. Se ha realizado de esta manera porque Tailwind no posee actualmente una forma de aplicar la propiedad CSS `text-shadow`. Esta propiedad agrega un efecto de sombra al texto, en este caso de color coral claro.
+
+La siguiente sección se encuentra englobada dentro de otro `div`:
+
+<div class="py-16 w-[90%] max-w-[1000px] mx-auto text-text-color leading-6">
+
+La clase `py-16`establece un relleno vertical (_padding_) de 16 unidades en el eje _y_, lo que crea un espacio adicional arriba y abajo del contenido dentro del contenedor. `W-[90%]` establece el ancho del contenedor en el 90% del ancho de su contenedor padre. En cuanto a `max-w-[1000px]`, establece un ancho máximo del contenedor en 1000 píxeles. Esto evita que el contenedor se vuelva demasiado ancho en pantallas grandes y ayuda a mantener un diseño más legible. La clase `mx-auto` centra el contenedor horizontalmente en su contenedor padre. Aplicando un margen izquierdo y derecho automático, el contenedor se alinea en el centro horizontal de su contenedor padre. La clase `text-text-color` establece el color temático de texto del contenido dentro del contenedor. `leading-6` establece el espaciado entre líneas del texto dentro del contenedor. En este caso, se establece en 1.5 unidades, lo que aumenta ligeramente la separación vertical entre líneas de texto. Esto mejora la legibilidad del texto al proporcionar un espacio de lectura adecuado.
+
+Respecto al código del rótulo del título, se describió a través de las siguientes clases:
+
+<h3 class="text-center text-[1.4em] py-8 font-semibold" id="rules-and-policies">Our rules and policies</h3>
+
+La clase `text-center` alinea el texto en el centro horizontalmente, mientras que `text-[1.4em]` establece el tamaño del texto en 1.4 veces el tamaño base de la fuente. La clase `py-8` establece un relleno vertical de 8 unidades en el eje _y_, y la clase `font-semibold` convierte la fuente en negrita.
+
+El código relativo a la última actualización incluye un centrado de texto a través de `text-center`, y un aumento del _padding_ inferior a cuatro unidades.
+
+A continuación, se describe los bloques del lema del club y la introducción:
+
+```html
+<div class="flex flex-wrap py-4">
+  <blockquote class="text-lg flex-auto w-1/4 m-[1.75em]">Our rules can be summed up in our motto: "Play with
+    respect,
+    compete with fairness."</blockquote>
+  <p class="blog-paragraph flex-auto w-2/3">Our rules and policies are an essential component that
+    outlines the expectations and regulations that govern the behavior of club members. It is important
+    for
+    the chess club to have clear and concise rules to ensure a safe and enjoyable experience for all
+    participants. The following paragraphs will detail some typical rules and policies found on the
+    webpage
+    of a chess club for young people.</p>
+</div>
+```
+
+En este código HTML, se crea un contenedor `<div>` con las clases `flex` y `flex-wrap`, lo que significa que los elementos contenidos se colocarán en una disposición de tipo flexbox y se envolverán en múltiples líneas si es necesario. Dentro del contenedor, hay dos elementos principales.
+
+El primer elemento es un bloque de citas `<blockquote>` con las clases `text-lg`, `flex-auto`, `w-1/4` y `m-[1.75em]`. La clase `text-lg` establece el tamaño de fuente del bloque de citas en grande. Las clases `flex-auto` y `w-1/4` indican que el bloque de citas debe ocupar un ancho flexible y que debe ocupar el 25% del ancho del contenedor. La clase `m-[1.75em]` establece un margen de 1.75 veces el tamaño de la fuente alrededor del bloque de citas.
+
+El segundo elemento es un párrafo `<p>` con las clases `blog-paragraph`, `flex-auto` y `w-2/3`. Las clases `flex-auto` y `w-2/3` indican que el párrafo debe ocupar un ancho flexible y que debe ocupar el 66.67% del ancho del contenedor.
+
+A continuación se describe el código relativo a las reglas:
+
+```html
+<div class="rule-set">
+  <ol class="py-[1em] border-y-4 border-text-color m-1">
+    <li>
+      <h3 class="rule-title">1. Respectful behaviour</h3>
+      <!-- Aquí una regla -->
+    </li>
+    <li>
+      <h3 class="rule-title">2. Being there is essential</h3>
+      <!-- Aquí una regla -->
+    </li>
+    <li>
+      <h3 class="rule-title">3. Conflicts are resolved in civilised terms</h3>
+      <!-- Aquí una regla -->
+    </li>
+  </ol>
+</div>
+```
+
+Esta parte del código se desarrolló como directivas. La única parte en la que se aplicaron estilos en línea a través de clase corresponde al elemento `<ol>`, que posee con las clases `py-[1em] border-y-4 border-text-color m-1` adquiere un _padding_ en el eje y de 1 em, se establece un border en el eje `y` de 4 unidades de anchura, y se establece el color del mismo como el color del texto, así como un margen global de 1 unidad.
+
+En cuanto a las clases aplicadas mediante directivas a `rule-title-` y `rule-description`, estas son las siguientes:
+
+```css
+.rule-title {
+  @apply text-[1.2em] my-6 font-semibold;
+}
+
+.rule-description {
+  @apply py-4 ml-8;
+}
+```
+
+La regla `.rule-title` utiliza la directiva `@apply` para aplicar un `text-[1.2em]` para establecer el tamaño del texto en 1.2 veces el tamaño base, `my-6` para agregar un margen vertical de 6 espacios, y `font-semibold` para establecer la fuente en negrita.
+
+La regla `.rule-description`, por otro lado, utiliza la directiva `@apply` para aplicar `py-4` para agregar un relleno vertical de 4 espacios y `ml-8 `para agregar un margen izquierdo de 8 espacios. Esto ayudará a dar formato y espaciado adecuados a los párrafos que contengan la descripción de las reglas.
+
+Para el elemento `blockquote` siguiente, se aplicó el siguiente código:
+
+```html
+<blockquote class="text-lg m-[1.75em]">
+```
+En este caso, se le ha asignado la clase `text-lg` que establece el tamaño del texto en grande. Además, se le ha asignado la clase `m-[1.75em]`, que establece un margen de espacio alrededor del bloque de texto citado, utilizando una medida relativa en `em`.
+
+Para los párrafos, elementos con clase `.blog-paragraph`, se aplicó una directiva:
+
+```css
+.blog-paragraph {
+  @apply m-0 py-4;
+}
+```
+
+Esta elimina el margen y aplica, a través de `py-4`, un _padding-block_ de cuatro unidades de Tailwind.
+
+Para la imagen siguiente, se describió el código:
+
+```html
+<figure class="my-4">
+  <div class="image-container">
+    <img src="assets/images/chess_tournament.jpg" alt="People playing chess at a tournament">
+  </div>
+  <figcaption class="text-center text-[0.9em] my-2">
+    So far, the club has upheld a healthy and friendly environment
+  </figcaption>
+</figure>
+```
+
+La clase "my-4" establece un margen vertical de 4 unidades de espacio alrededor de la figura. Es decir, agrega espacio tanto en la parte superior como en la parte inferior de la figura. `text-center` alinea el texto del elemento `<figcaption>` en el centro. `text-[0.9em]` establece el tamaño de fuente del texto del elemento `<figcaption>` en 0.9 unidades em. La clase `my-2` establece un margen vertical de 2 unidades de espacio alrededor del elemento.
+
+A continuación se hallan dos párrafos más, que poseen las mismas características que el elemento con clase `blog-paragraph` descrito más arriba.
+
+Después se describió el código relativo a la previsualización de otros _posts_ del blog.
+
+```html
+<div>
+  <h4 class="text-center font-bold">Other posts</h4>
+  <div class="flex flex-wrap">
+    <div class="card">
+      <!-- Código del interior de la tarjeta-->
+    </div>
+    <div class="card">
+      <!-- Código del interior de la tarjeta-->
+    </div>
+    <div class="card">
+      <!-- Código del interior de la tarjeta-->
+    </div>
+  </div>
+</div>
+```
+
+En este caso, los elementos se dispusieron dentro de un contenedor que usa `flex`, para que estos se distribuyan de forma horizontal. Se aplicó `flex-wrap` para que en dispositivos de menor tamaño, estos se replieguen. El contenido de las tarjetas y su interior se definió mediante directivas:
+
+```css
+  .card {
+    @apply flex-grow-[1] flex-shrink-0 basis-[0%] border rounded-md bg-[#fff] flex-col flex-wrap min-w-[13em];
+  }
+
+  .card-img-top {
+    @apply bg-[url('../images/backgrounds/checked_background.png')] bg-repeat-round bg-contain py-[10%] px-[20%] w-[100%];
+  }
+
+  .card-body {
+    @apply p-4 text-[.85em];
+  }
+
+  .card-title {
+    @apply font-bold underline text-center p-6;
+  }
+```
+
+Estas directivas se describen en los siguientes puntos:
+
+* `.card` establece que la tarjeta debe crecer y encogerse de forma flexible (`flex-grow-[1]`, `flex-shrink-0`) sin ocupar espacio adicional (`basis-[0%]`). Además, agrega un borde y bordes redondeados (`border`, `rounded-md`), un fondo blanco (`bg-[#fff]`), y organiza los elementos internos en una columna flexible con capacidad de ajuste (`flex-col`, `flex-wrap`). También define un ancho mínimo de 13em (`min-w-[13em]`).
+* `.card-img-top` configura el estilo de la imagen principal de la tarjeta. Utiliza una imagen de fondo con una URL específica (`bg-[url('...')]`) y se asegura de que la imagen se repita y se ajuste correctamente dentro del contenedor (`bg-repeat-round`, `bg-contain`). Además, establece un relleno vertical del 10% y un relleno horizontal del 20% (`py-[10%]`, `px-[20%]`), y asegura que la imagen ocupe el ancho completo de su contenedor (`w-[100%]`).
+* `.card-body` define un espaciado interno de 4 unidades (`p-4`) para el cuerpo de la tarjeta y ajusta el tamaño del texto a 0.85em (`text-[.85em]`).
+* Por último, `.card-title` establece que el título de la tarjeta debe ser negrita (`font-bold`), tener una línea subrayada (`underline`), estar centrado horizontalmente (`text-center`) y tener un espaciado interno de 6 unidades en todas las direcciones (`p-6`).
+
+Este es el código principal de la página principal `index.html`, a continuación se describe el código de la página de miembros.
+
+### Desarrollo en Tailwind de la parte principal de `members.html`
+
+Para la etiquieta `main`, que engloba el código principal de la página, se aplicaron las siguientes utilidades:
+
+```html
+<main
+    class="w-[90%] max-w-[1000px] text-text-color flex flex-col justify-center items-center my-0 mx-auto font-normal">
+```
+
+La clase `w-[90%]` establece que el ancho del elemento `<main>` será del 90% del ancho de su contenedor. La clase `max-w-[1000px]` establece un ancho máximo de 1000 píxeles para el elemento. `text-text-color` define el color del texto dentro del elemento según el valor configurado para `text-color` en la paleta de colores de Tailwind. Además, las clases `flex`, `flex-col`, `justify-center` y `items-center` aplican estilos de diseño flexbox para centrar vertical y horizontalmente el contenido. La clase `my-0` elimina cualquier margen vertical y la clase `mx-auto` centra el elemento horizontalmente en su contenedor. Por último, la clase `font-normal` establece el estilo de fuente del texto dentro del elemento `<main>` como normal.
+
+El título de esta sección se describió mediante el siguiente código:
+
+```html
+<h2 class="py-6 my-6 text-[1.75em] font-bold [text-shadow:_2px_2px_#ccc]">Chess Mates members</h2>
+```
+
+Las clases `py-6` y `my-6` establecen un relleno y margen vertical de 6 unidades de espacio, respectivamente, y `text-[1.75em]` define el tamaño de fuente del texto como 1.75 veces el tamaño de fuente base. `font-bold`, como ya se ha explicado, aplica un estilo de fuente en negrita. Por último, la clase `[text-shadow: 2px 2px #ccc]` crea una sombra de texto desplazada 2 píxeles hacia la derecha y 2 píxeles hacia abajo, con un color de sombra de `#ccc` (gris claro).
+
+Posteriormente, el elemento que engloba todas las tarjetas de miembro se ha desarrollado como un `<div>` que posee las siguientes clases:
+
+```html
+<div class="member-card-block flex flex-wrap items-center justify-around">
+```
+
+La clase `flex-wrap` permite que los elementos se envuelvan automáticamente en nuevas filas si no hay suficiente espacio horizontal disponible. Las clases `items-center` y `justify-around` se utilizan para alinear los elementos verticalmente y distribuir el espacio restante de manera equitativa entre ellos, creando así un diseño centrado y equidistante entre los elementos. En resumen, este código crea un bloque de tarjetas de miembros con un diseño flexible y distribución equitativa de los elementos dentro del contenedor.
+
+Para las tarjetas, al repetirse frecuentemente el código, se usaron directivas:
+
+```css
+  .member-card {
+    @apply w-[20em] flex flex-col py-8 items-center justify-center;
+  }
+
+  .member-img {
+    clip-path: circle(50%);
+  }
+
+  .member-name {
+    @apply text-[1.4em] font-bold my-4;
+  }
+
+  .member-description {
+    @apply m-6 h-32;
+  }
+
+  .elo {
+    @apply py-6;
+  }
+```
+
+`.member-card` se aplica al elemento que engloba toda la tarjeta para establecer un ancho fijo de 20em y utilizar un diseño de columna flexible con clases `flex` y `flex-col`, de forma que dispone los elementos de forma vertical. Además, se agregan clases `py-8` para establecer un relleno vertical de 8 unidades en el eje _y_, y `items-center justify-center` para alinear vertical y horizontalmente los elementos dentro del contenedor. `.member-img` da forma de recorte circular a la imagen del miembro mediante la propiedad `clip-path` con la función `circle(50%)`. La clase `.member-name` se aplica para establecer el tamaño del texto en `1.4em`, utilizando una fuente en negrita (`font-bold`) y un margen vertical de 4 unidades (`my-4`). `.member-description` agrega un margen de 6 unidades en todos los lados (`m-6`) y establece una altura fija de 32 unidades (`h-32`) para la descripción del miembro. Esto puede utilizarse para crear un espacio adecuado para mostrar información adicional sobre el miembro. La última clase, `.elo`, agrega un relleno vertical de 6 unidades (`py-6`) al elemento.
+
+Finalmente, existe un elemento que anima a los lectores a hacerse miembros, descrito así:
+
+```html
+<p class="contact-us py-8 my-4">If you'd like to be a part of the club, don't hesitate to contact us through our form</a>!</p>
+```
+
+En este caso, se le aplica un estilo de _padding block_ de 8 unidades (`2em`), así como un margen en el mismo eje de 4 unidades (`1em`). 
 
 # Publicación del sitio web
 Para la publicación de la web en internet se utilizó el servicio Netlify. Este permite la publicación de la página a partir de un repositorio público alojado en GitHub.
